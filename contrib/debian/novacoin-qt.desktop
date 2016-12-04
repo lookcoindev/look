@@ -1,0 +1,13 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=LookCoin
+Comment=LookCoin P2P Cryptocurrency
+Comment[ru]=LookCoin, P2P криптовалюта
+Comment[fr]=LookCoin, monnaie virtuelle cryptographique pair à pair
+Comment[tr]=LookCoin, eşten eşe kriptografik sanal para birimi
+Exec=/usr/bin/LookCoin-qt
+Terminal=false
+Type=Application
+Icon=/usr/share/pixmaps/LookCoin80.xpm
+MimeType=x-scheme-handler/LookCoin;
+Categories=Office;

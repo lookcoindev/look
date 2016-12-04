@@ -1,0 +1,68 @@
+#!/bin/sh
+
+# PROVIDE: LookCoin
+# REQUIRE: LOGIN
+# KEYWORD: shutdown
+
+#
+# Add the following lines to /etc/rc.conf.local or /etc/rc.conf
+# to enable this service:
+#
+# LookCoin_enable (bool): Set to NO by default. Set this variable to YES if you want to enable LookCoin service.
+# LookCoin_config (path): Set to /usr/local/etc/LookCoin.conf by default.
+# LookCoin_user:  The user account LookCoin daemon runs as. It uses 'root' user by default.
+# LookCoin_group: The group account LookCoin daemon runs as. It uses 'wheel' group by default.
+# LookCoin_datadir (str): Default to "/var/db/LookCoin". Base data directory.
+
+. /etc/rc.subr
+
+name=LookCoin
+rcvar=LookCoin_enable
+
+: ${LookCoin_enable:=NO}
+: ${LookCoin_config=/usr/local/etc/LookCoin.conf}
+: ${LookCoin_datadir=/var/db/LookCoin}
+: ${LookCoin_user="root"}
+: ${LookCoin_group="wheel"}
+
+required_files=${LookCoin_config}
+command=/usr/local/bin/LookCoind
+LookCoin_chdir=${LookCoin_datadir}
+pidfile="${LookCoin_datadir}/LookCoind.pid"
+stop_cmd=LookCoin_stop
+command_args="-conf=${LookCoin_config} -datadir=${LookCoin_datadir} -daemon -pid=${pidfile}"
+start_precmd="${name}_prestart"
+
+LookCoin_create_datadir()
+{
+	echo "Creating data directory"
+	eval mkdir -p ${LookCoin_datadir}
+	[ $? -eq 0 ] && chown -R ${LookCoin_user}:${LookCoin_group} ${LookCoin_datadir}
+}
+
+LookCoin_prestart()
+{
+	if [ ! -d "${LookCoin_datadir}/." ]; then
+		LookCoin_create_datadir || return 1
+	fi
+}
+
+LookCoin_requirepidfile()
+{
+	if [ ! "0`check_pidfile ${pidfile} ${command}`" -gt 1 ]; then
+		echo "${name} not running? (check $pidfile)."
+		exit 1
+	fi
+}
+
+LookCoin_stop()
+{
+    LookCoin_requirepidfile
+
+	echo "Stopping ${name}."
+	eval ${command} -conf=${LookCoin_config} -datadir=${LookCoin_datadir} stop
+	wait_for_pids ${rc_pid}
+}
+
+load_rc_config $name
+run_rc_command "$1"

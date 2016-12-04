@@ -1,0 +1,11 @@
+[Unit]
+Description=LookCoin daemon serivce
+After=network.target
+
+[Service]
+Type=simple
+User=LookCoin
+ExecStart=/opt/LookCoin/LookCoind
+
+[Install]
+WantedBy=multi-user.target

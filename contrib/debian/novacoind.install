@@ -1,0 +1,2 @@
+debian/bin/LookCoind usr/bin
+src/LookCoind usr/lib/LookCoin

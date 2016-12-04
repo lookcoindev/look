@@ -1,0 +1,5 @@
+LookCoin-qt usr/bin
+share/pixmaps/LookCoin32.xpm usr/share/pixmaps
+share/pixmaps/LookCoin80.xpm usr/share/pixmaps
+debian/LookCoin-qt.desktop usr/share/applications
+debian/LookCoin-qt.protocol usr/share/kde4/services/
